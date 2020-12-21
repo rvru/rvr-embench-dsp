@@ -1,22 +1,27 @@
+/**
+    Elliptic filter.
 
-#include "file_selector.h"
+    Reference: (https://en.wikipedia.org/wiki/Elliptic_filter)
 
-#if ELLIPTIC_TB
+    @file elliptic.c
+    @author
+    @email
+    @date
+*/
 
 #include "elliptic.h"
 
 /*
-void print_array(float* arr_in, int size)
-{
-    printf("[ ");
-    for (int i = 0; i < size; i++) {
-        printf("%f, ", *arr_in);
-        arr_in++;
-    }
-    printf(" ]\n");
-}
-*/
-void filter_response(float * output_array_ptr, float * a_coefs, float * b_coefs, float gain, int pad_amt, int data_amt)
+ * Elliptic filter
+ *
+ * Params:
+ *      Pointer to output array
+ *      Pointers to filter coefficient arrays
+ *      Filter gain
+ *      Padding amount
+ *      Input data length
+ */
+void elliptic(float * output_array_ptr, float * a_coefs, float * b_coefs, float gain, int pad_amt, int data_amt)
 {
     float y_0[300];
     float w_1[300];
@@ -62,17 +67,3 @@ void filter_response(float * output_array_ptr, float * a_coefs, float * b_coefs,
     }
 
 }
-
-int check_if_equal(float* test_data, float* check_data, int data_length, float epsilon) 
-{
-    int match = 1;
-    for (int i = 0; i < data_length; i++) {
-        if ((*(test_data + i) < *(check_data + i) - epsilon) || (*(test_data + i) > * (check_data + i) + epsilon)) {
-            match = 0;
-        }
-    }
-    return match;
-}
-
-
-#endif // ELLIPTIC_TB
