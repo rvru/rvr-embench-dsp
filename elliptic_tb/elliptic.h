@@ -1,15 +1,27 @@
+/**
+    Header file for elliptic filter.
 
-#if ELLIPTIC_TB
+    Reference: (https://en.wikipedia.org/wiki/Elliptic_filter)
 
-#ifndef ELLIPTICAL_TB_H
-#define ELLIPTICAL_TB_H
+    @file elliptic.h
+    @author
+    @email
+    @date
+*/
 
-void print_array(float* arr_in, int size);
+#ifndef ELLIPTIC_H
+#define ELLIPTIC_H
 
-void filter_response(float* output_array_ptr, float* a_coefs, float* b_coefs, float gain, int pad_amt, int data_amt);
+/*
+ * Elliptic filter
+ *
+ * Params:
+ *      Pointer to output array
+ *      Pointers to filter coefficient arrays
+ *      Filter gain
+ *      Padding amount
+ *      Input data length
+ */
+void elliptic(float* output_array_ptr, float* a_coefs, float* b_coefs, float gain, int pad_amt, int data_amt);
 
-int check_if_equal(float* test_data, float* check_data, int data_length, float epsilon);
-
-#endif // ELLIPTICAL_TB_H
-
-#endif //ELLIPTIC_TB
+#endif // ELLIPTIC_H
