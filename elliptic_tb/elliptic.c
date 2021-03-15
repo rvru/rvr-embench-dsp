@@ -11,6 +11,17 @@
 
 #include "elliptic.h"
 
+
+static float y_0[300];
+static float w_1[300];
+static float y_1[300];
+static float w_2[300];
+static float y_2[300];
+static float w_3[300];
+static float y_3[300];
+static float w_4[300];
+static float y_4[300];
+
 /*
  * Elliptic filter
  *
@@ -23,15 +34,6 @@
  */
 void elliptic(float * output_array_ptr, float * a_coefs, float * b_coefs, float gain, int pad_amt, int data_amt)
 {
-    float y_0[300];
-    float w_1[300];
-    float y_1[300];
-    float w_2[300];
-    float y_2[300];
-    float w_3[300];
-    float y_3[300];
-    float w_4[300];
-    float y_4[300];
     for (int i = 0; i < pad_amt; i++) {
         y_0[i] = 0;
         w_1[i] = 0;
