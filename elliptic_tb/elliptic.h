@@ -3,10 +3,10 @@
 
     Reference: (https://en.wikipedia.org/wiki/Elliptic_filter)
 
-    @file elliptic.h
-    @author
-    @email
-    @date
+    @file   elliptic.h
+    @author Daniel Rothfusz
+    @email  dpr7@rice.edu
+    @date   03-29-2021
 */
 
 #ifndef ELLIPTIC_H
@@ -22,6 +22,6 @@
  *      Padding amount
  *      Input data length
  */
-void elliptic(float* output_array_ptr, float* a_coefs, float* b_coefs, float gain, int pad_amt, int data_amt);
+void elliptic(float* output_array_ptr, float* a_coefs, float* b_coefs, float gain, int data_amt);
 
 #endif // ELLIPTIC_H

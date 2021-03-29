@@ -3,24 +3,23 @@
 
     Reference: (https://en.wikipedia.org/wiki/Elliptic_filter)
 
-    @file elliptic.c
-    @author
-    @email
-    @date
+    @file   elliptic.c
+    @author Daniel Rothfusz
+    @email  dpr7@rice.edu
+    @date   03-29-2021
 */
 
 #include "elliptic.h"
 
-
-static float y_0[300];
-static float w_1[300];
-static float y_1[300];
-static float w_2[300];
-static float y_2[300];
-static float w_3[300];
-static float y_3[300];
-static float w_4[300];
-static float y_4[300];
+static float y_0[3];
+static float w_1[3];
+static float y_1[3];
+static float w_2[3];
+static float y_2[3];
+static float w_3[3];
+static float y_3[3];
+static float w_4[3];
+static float y_4[3];
 
 /*
  * Elliptic filter
@@ -32,9 +31,9 @@ static float y_4[300];
  *      Padding amount
  *      Input data length
  */
-void elliptic(float * output_array_ptr, float * a_coefs, float * b_coefs, float gain, int pad_amt, int data_amt)
+void elliptic(float * output_array_ptr, float * a_coefs, float * b_coefs, float gain, int data_amt)
 {
-    for (int i = 0; i < pad_amt; i++) {
+    for (int i = 0; i < 3; i++) {
         y_0[i] = 0;
         w_1[i] = 0;
         y_1[i] = 0;
@@ -45,27 +44,45 @@ void elliptic(float * output_array_ptr, float * a_coefs, float * b_coefs, float 
         w_4[i] = 0;
         y_4[i] = 0;
     }
-    y_0[pad_amt] = 1;
-    w_1[pad_amt] = *(a_coefs + 1) * w_1[pad_amt - 1] + *(a_coefs + 2) * w_1[pad_amt - 2] + y_0[pad_amt];
-    y_1[pad_amt] = *(b_coefs + 0) * w_1[pad_amt] + *(b_coefs + 1) * w_1[pad_amt - 1] + *(b_coefs + 2) * w_1[pad_amt - 2];
-    w_2[pad_amt] = *(a_coefs + 4) * w_2[pad_amt - 1] + *(a_coefs + 5) * w_2[pad_amt - 2] + y_1[pad_amt];
-    y_2[pad_amt] = *(b_coefs + 3) * w_2[pad_amt] + *(b_coefs + 4) * w_2[pad_amt - 1] + *(b_coefs + 5) * w_2[pad_amt - 2];
-    w_3[pad_amt] = *(a_coefs + 7) * w_3[pad_amt - 1] + *(a_coefs + 8) * w_3[pad_amt - 2] + y_2[pad_amt];
-    y_3[pad_amt] = *(b_coefs + 6) * w_3[pad_amt] + *(b_coefs + 7) * w_3[pad_amt - 1] + *(b_coefs + 8) * w_3[pad_amt - 2];
-    w_4[pad_amt] = *(a_coefs + 10) * w_4[pad_amt - 1] + *(a_coefs + 11) * w_4[pad_amt - 2] + y_3[pad_amt];
-    y_4[pad_amt] = *(b_coefs + 9) * w_4[pad_amt] + *(b_coefs + 10) * w_4[pad_amt - 1] + *(b_coefs + 11) * w_4[pad_amt - 2];
-    *output_array_ptr = y_4[pad_amt] * gain;
-    for (int i = pad_amt + 1; i < data_amt + pad_amt; i++) {
-        y_0[i] = 0;
-        w_1[i] = *(a_coefs + 1) * w_1[i - 1] + *(a_coefs + 2) * w_1[i - 2] + y_0[i];
-        y_1[i] = *(b_coefs + 0) * w_1[i] + *(b_coefs + 1) * w_1[i - 1] + *(b_coefs + 2) * w_1[i - 2];
-        w_2[i] = *(a_coefs + 4) * w_2[i - 1] + *(a_coefs + 5) * w_2[i - 2] + y_1[i];
-        y_2[i] = *(b_coefs + 3) * w_2[i] + *(b_coefs + 4) * w_2[i - 1] + *(b_coefs + 5) * w_2[i - 2];
-        w_3[i] = *(a_coefs + 7) * w_3[i - 1] + *(a_coefs + 8) * w_3[i - 2] + y_2[i];
-        y_3[i] = *(b_coefs + 6) * w_3[i] + *(b_coefs + 7) * w_3[i - 1] + *(b_coefs + 8) * w_3[i - 2];
-        w_4[i] = *(a_coefs + 10) * w_4[i - 1] + *(a_coefs + 11) * w_4[i - 2] + y_3[i];
-        y_4[i] = *(b_coefs + 9) * w_4[i] + *(b_coefs + 10) * w_4[i - 1] + *(b_coefs + 11) * w_4[i - 2];
-        *(output_array_ptr + i - pad_amt) = y_4[i] * gain;
+    y_0[2] = 1;
+    w_1[2] = a_coefs[1] * w_1[1] + a_coefs[2] * w_1[0] + y_0[2];
+    y_1[2] = b_coefs[0] * w_1[2] + b_coefs[1] * w_1[1] + b_coefs[2] * w_1[0];
+    w_2[2] = a_coefs[4] * w_2[1] + a_coefs[5] * w_2[0] + y_1[2];
+    y_2[2] = b_coefs[3] * w_2[2] + b_coefs[4] * w_2[1] + b_coefs[5] * w_2[0];
+    w_3[2] = a_coefs[7] * w_3[1] + a_coefs[8] * w_3[0] + y_2[2];
+    y_3[2] = b_coefs[6] * w_3[2] + b_coefs[7] * w_3[1] + b_coefs[8] * w_3[0];
+    w_4[2] = a_coefs[10] * w_4[1] + a_coefs[11] * w_4[0] + y_3[2];
+    y_4[2] = b_coefs[9] * w_4[2] + b_coefs[10] * w_4[1] + b_coefs[11] * w_4[0];
+    output_array_ptr[0] = y_4[2] * gain;
+    for (int i = 1; i < data_amt; i++) {
+        y_0[0] = y_0[1];
+        w_1[0] = w_1[1];
+        y_1[0] = y_1[1];
+        w_2[0] = w_2[1];
+        y_2[0] = y_2[1];
+        w_3[0] = w_3[1];
+        y_3[0] = y_3[1];
+        w_4[0] = w_4[1];
+        y_4[0] = y_4[1];
+        y_0[1] = y_0[2];
+        w_1[1] = w_1[2];
+        y_1[1] = y_1[2];
+        w_2[1] = w_2[2];
+        y_2[1] = y_2[2];
+        w_3[1] = w_3[2];
+        y_3[1] = y_3[2];
+        w_4[1] = w_4[2];
+        y_4[1] = y_4[2];
+        y_0[2] = 0;
+        w_1[2] = a_coefs[1] * w_1[1] + a_coefs[2] * w_1[0] + y_0[2];
+        y_1[2] = b_coefs[0] * w_1[2] + b_coefs[1] * w_1[1] + b_coefs[2] * w_1[0];
+        w_2[2] = a_coefs[4] * w_2[1] + a_coefs[5] * w_2[0] + y_1[2];
+        y_2[2] = b_coefs[3] * w_2[2] + b_coefs[4] * w_2[1] + b_coefs[5] * w_2[0];
+        w_3[2] = a_coefs[7] * w_3[1] + a_coefs[8] * w_3[0] + y_2[2];
+        y_3[2] = b_coefs[6] * w_3[2] + b_coefs[7] * w_3[1] + b_coefs[8] * w_3[0];
+        w_4[2] = a_coefs[10] * w_4[1] + a_coefs[11] * w_4[0] + y_3[2];
+        y_4[2] = b_coefs[9] * w_4[2] + b_coefs[10] * w_4[1] + b_coefs[11] * w_4[0];
+        output_array_ptr[i] = y_4[2] * gain;
     }
 
 }

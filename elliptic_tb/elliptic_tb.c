@@ -16,7 +16,6 @@
  *  constants
  ***********************************************/
 
-#define PADDING 5
 #define DATA_LENGTH 256
 
 // expected (true) result
@@ -51,23 +50,23 @@ int main(void)
     // filter gains
     float gain_factor = (float)(0.085667864748512997929985601786029292271 * 0.071984525012505143348739977682271273807 * 0.06414311970061792322894689277745783329 * 0.060572179183183680328816933524649357423);
     // filter response
-    float res[DATA_LENGTH];
+    float response[DATA_LENGTH];
 		
     // compute filter response
-    elliptic(&res[0], &a[0], &b[0], gain_factor, PADDING, DATA_LENGTH);
-		
+    elliptic(response, a, b, gain_factor, DATA_LENGTH);
+
     // test for pointwise equality with some error tolerance
     //      abs(res[i] - true_res[i]) < epsilon
     float epsilon = (float)0.000002;
-    int pass = check_if_equal(res, true_res, DATA_LENGTH, epsilon);
+    int pass = check_if_equal(response, true_res, DATA_LENGTH, epsilon);
 
-		if (pass){
-				return 0;
-		}
-		else{
-				return 1;
-		}
-		/*
+    if (pass){
+            return 0;
+    }
+    else{
+            return 1;
+    }
+    /*
     if (pass) {
         printf("Test Passed!");
     }
@@ -76,5 +75,5 @@ int main(void)
     }
 
     return 0;
-		*/
+    */
 }
