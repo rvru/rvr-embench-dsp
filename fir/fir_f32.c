@@ -1,3 +1,7 @@
+/**
+ * Implementation of functions in fir_f32.h.
+ */
+
 #include "fir_f32.h"
 
 void fir_init_f32(
