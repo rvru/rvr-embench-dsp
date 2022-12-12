@@ -40,11 +40,11 @@ void fir_f32(
     {
         sum = 0.0;
         for (i = 0; i < S->numTaps; i++)
-            sum += S->pCoeffs[i] + S->pState[i + j];
+            sum += S->pCoeffs[i] * S->pState[i + j];
         pDst[j] = sum;
     }
 
     // Update past inputs in state array
-    for (i = S->numTaps - 2, j = 0; i >= 0; i--, j--)
+    for (i = S->numTaps - 2, j = 0; i >= 0; i--, j++)
         S->pState[i] = S->pState[S->numTaps + blockSize - 2 - j];
 }
